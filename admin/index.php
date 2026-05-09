@@ -38,7 +38,7 @@ $display_name = htmlspecialchars(
     --color-texto: #ffffff;
     --color-texto-oscuro: #000000;
     
-    /* Colores de botones - manteniendo la base azul original */
+    /* Colores de botones*/
     --btn-principal-bg: linear-gradient(135deg, #1565C0, #0D47A1);
     --btn-principal-hover: linear-gradient(135deg, #1E88E5, #1565C0);
     
@@ -80,6 +80,7 @@ $display_name = htmlspecialchars(
 }
 
 body {
+    padding-top: 90px;
     margin: 0;
     background: url("fondo.jpg") center/cover fixed no-repeat;
     font-family: var(--font-family);
@@ -87,12 +88,34 @@ body {
 }
 
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     background: var(--color-bg-navbar);
     padding: 18px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
+
+.navbar.scrolled {
+    padding: 10px 40px;
+    background: var(--color-bg-navbar);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.navbar.scrolled .nav-brand img {
+    height: 42px;
+}
+
+.navbar.scrolled .nav-brand span {
+    font-size: 24px;
+}
+
 
 .nav-brand {
     display: flex;
@@ -156,7 +179,7 @@ body {
 }
 
 .table-container {
-    overflow-x: auto;
+    overflow-x: scroll;
     border-radius: 18px;
 }
 
@@ -216,7 +239,7 @@ tbody tr:hover td {
     display: flex;
     justify-content: center;
     gap: 25px;
-    margin-top: 30px;
+    margin-top: 20px;
     flex-wrap: wrap;
 }
 
@@ -226,10 +249,10 @@ tbody tr:hover td {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     margin-top: 0;
-    padding: 16px 46px;
-    border-radius: 34px;
+    padding: 14px 60px;
+    border-radius: 50px;
     font-weight: 700;
     font-size: 15.5px;
     text-decoration: none;
@@ -302,7 +325,7 @@ tbody tr:hover td {
 <body>
 
 <div class="navbar">
-    <div class="nav-brand">
+    <div class="nav-brand sticky-top">
         <img src="plas.jpg">
         <span>PlastyPetco</span>
     </div>
@@ -499,14 +522,7 @@ if ($proc->num_rows > 0) {
 <?php
 $hayProceso = ($conexion->query("SELECT id FROM inventario_proceso LIMIT 1")->num_rows > 0);
 ?>
-<div class="barra-botones">
-    <form action="guardar_paquete_proceso.php" method="POST"
-          onsubmit="return validarProceso();">
-        <button type="submit" class="btn-principal">
-            💾 Guardar Proceso
-        </button>
-    </form>
-</div>
+
 
 
 <script>
@@ -521,6 +537,15 @@ function validarProceso(){
 </script>
 
 </div>
+<div class="barra-botones">
+    <form action="guardar_paquete_proceso.php" method="POST"
+          onsubmit="return validarProceso();">
+        <button type="submit" class="btn-principal">
+            💾 Guardar Proceso
+        </button>
+    </form>
+</div>
+
 </div>
 
 
@@ -590,14 +615,6 @@ if ($prod->num_rows > 0) {
 $hayProduccion = ($conexion->query("SELECT id FROM produccion LIMIT 1")->num_rows > 0);
 ?>
 
-<div class="barra-botones">
-    <form action="guardar_paquete_produccion.php" method="POST"
-          onsubmit="return validarProduccion();">
-        <button type="submit" class="btn-principal">
-            💾 Guardar Producción
-        </button>
-    </form>
-</div>
 
 <script>
 function validarProduccion(){
@@ -610,6 +627,16 @@ function validarProduccion(){
 </script>
 
 </div>
+
+<div class="barra-botones">
+    <form action="guardar_paquete_produccion.php" method="POST"
+          onsubmit="return validarProduccion();">
+        <button type="submit" class="btn-principal">
+            💾 Guardar Producción
+        </button>
+    </form>
+</div>
+
 </div>
 
 
@@ -743,6 +770,19 @@ function buscarDespacho() {
     });
 
 }
+
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }
+});
+
+
 </script>
 </body>
 </html>
